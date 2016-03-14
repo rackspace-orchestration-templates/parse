@@ -1,0 +1,95 @@
+schema-version: 1.0.0
+application-family: Miscellaneous
+application-name: Parse
+application-version: latest
+flavor: Production
+flavor-weight: 1
+reach-info:
+
+  rackspace-supported: true
+hidden_outputs:
+ - parameter
+abstract: |
+  Parse Server is an open-source version of the Parse backend that can be
+  deployed to any infrastructure that can run Node.js.
+instructions: |
+  #### Getting Started
+  If you're new to Parse, you can find list of tutorials and examples at
+  [Parse.com](https://parse.com/tutorials).
+
+  After the stack has been created, you can find the admin username and
+  password listed in the "Credentials" section of Stack Details.
+
+  #### Details of Your Setup
+  This deployment was stood up using [Ansible](http://www.ansible.com/).
+  Once the stack has been deployed, Ansible will not run again unless you update the
+  stack. **Any changes made to the configuration may be overwritten when the stack
+  is updated.**
+
+  [Parse-server](https://github.com/ParsePlatform/parse-server) was installed
+  via NPM, and is configured to be run from '/home/parse', as the user 'parse'.
+  NPM was also used to install the latest version of Node.js for use with
+  Parse-server.  In order to restart parse-server, you will need to log into the
+  server via SSH as 'parse', then run the following commands:
+  > pm2 stop parse-wrapper
+  >
+  > pm2 start ecosystem.json
+
+  [Lsyncd](https://github.com/axkibe/lsyncd) has been installed in order to
+  sync static content from the primary server to all secondary servers.  In
+  order to update any custom code you might have, you only need to upload the
+  code to the primary server, under '/home/parse', and it will be replicated to
+  all other nodes in the stack.
+
+  [nginx](https://www.nginx.com/) was installed in order to serve the Parse API
+  over HTTPS.  It is configured with a 301 redirect from HTTP to HTTPS, and to
+  pass all requests from <URL>/parse/ to the parse-server.
+
+  #### Configuring Parse-server
+  Parse-server is configured using the environment variables in
+  '/home/parse/ecosystem.json'.  This includes the connection string for
+  MongoDB, the Application ID, the Master Key, as well as any additional
+  platform-specific keys you would like to configure.  If you need to update any
+  of this information, or would prefer not to provide the information to
+  Rackspace directly, you can configure the 'ecosystem.json' file yourself.
+
+  Backups are configured using Cloud Backups.  The primary server is configured
+  to back up /home/parse once per week, and to retain these backups for 30 days.
+
+  Monitoring is configured to verify that parse is running on both the primary
+  and all secondary servers, as well as that the Cloud Load Balancer is
+  functioning.  Additionally, the default CPU, RAM, and Filesystem checks
+  are in place on all servers.
+
+  #### Updating Drupal
+  Drupal does provide community documentation on [how to
+  upgrade](https://drupal.org/upgrade) your installation of Drupal. There are
+  several steps involved with the upgrade process. First, make sure to backup
+  your site files and your database prior to taking any steps to replace the
+  core site files. There are number of other tutorials available on places like
+  YouTube that can also step you though the upgrade/update process. There is
+  not currently a way to perform these upgrades automatically through the admin
+  interface.
+
+  #### Logging in via SSH
+  The private key provided in the passwords section can be used to login as
+  root via SSH. We have an article on how to use these keys with [Mac OS X and
+  Linux](http://www.rackspace.com/knowledge_center/article/logging-in-with-a-ssh-private-key-on-linuxmac)
+  as well as [Windows using
+  PuTTY](http://www.rackspace.com/knowledge_center/article/logging-in-with-a-ssh-private-key-on-windows).
+
+  #### Additional Notes
+  You can add additional servers to this deployment by updating the
+  "server_count" parameter for this stack.
+
+  This stack will not ensure that parse-server or the servers themselves are
+  up-to-date.  You are responsible for ensuring that all software is
+  updated.
+
+user-input-required: true
+description: |
+  #### Production
+
+  Parse Server is an open-source version of the Parse backend that can be
+  deployed to any infrastructure that can run Node.js.  This stack requires an
+  existing MongoDB instance.
