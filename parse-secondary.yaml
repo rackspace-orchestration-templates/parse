@@ -42,6 +42,9 @@ parameters:
   ansible_repo:
     type: string
     default: https://github.com/rackspace-orchestration-templates/ansible-roles.git
+  parse_pass:
+    type: string
+    default: ""
 
 resources:
   upload_role_config:
@@ -103,6 +106,7 @@ resources:
         parse_facebook_app_ids: ""
         parse_git_key: ""
         parse_git_repo: ""
+        parse_pass: { get_param: parse_pass }
         tz: "America/Chicago"
       config:
         get_resource: parse_config

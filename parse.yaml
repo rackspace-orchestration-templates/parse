@@ -336,6 +336,7 @@ resources:
                 stack: { get_param: "OS::stack_name" }
           ansible_branch: { get_param: ansible_branch}
           ansible_repo: { get_param: ansible_repo }
+          parse_pass: { get_attr: [ parse_pass, value ] }
   #Cloud Load Balancer
   load_balancer:
     type: Rackspace::Cloud::LoadBalancer
@@ -370,14 +371,26 @@ outputs:
     description: SSH Private Key
     value:
       get_attr: [ssh_key, private_key]
+  parse_password:
+    description: SSH Password for 'parse'
+    value:
+      get_attr: [parse_pass, value]
   server_ip:
-    description: Server Public IP
+    description: Primary Server Public IP
     value:
       get_attr: [parse_server, accessIPv4]
+  secondary_ip:
+    description: Secondary Server Public IPs
+    value:
+      get_attr: [parse_secondary, public_ip]
+  public_ip:
+    description: Load Balancer IP
+    value:
+      get_attr: [load_balancer, PublcIp]
   parse_api_url:
     description: Parse API URL
     value:
       str_replace:
-        template: https://url/parse
+        template: https://url/parse/
         params:
           url: { get_param: parse_url }
