@@ -87,8 +87,8 @@ parameters:
       - range: { min: 0, max: 10 }
   secondary_template:
     type: string
-    default: https://raw.githubusercontent.com/rackspace-orchestration-templates/parse/master/parse-secondary.yaml
-    #default: https://raw.githubusercontent.com/rackspace-orchestration-templates/parse/stable/parse-secondary.yaml
+    #default: https://raw.githubusercontent.com/rackspace-orchestration-templates/parse/master/parse-secondary.yaml
+    default: https://raw.githubusercontent.com/rackspace-orchestration-templates/parse/stable/parse-secondary.yaml
     label: Secondary Template
     description: Template to use for secondary servers
   ansible_branch:
@@ -212,7 +212,7 @@ resources:
         lsync_dirs: ['/home/parse']
         lsync_servers: { get_attr: [parse_secondary, private_ip] }
         firewall_global_rules: [ "0.0.0.0,0,22,tcp", "0.0.0.0,0,80,tcp", "0.0.0.0,0,443,tcp"]
-        #firewall_nodes: { get_attr: [parse_secondary, private_ip] }
+        firewall_nodes: { get_attr: [parse_secondary, private_ip] }
         firewall_node_rules: []
       config:
         get_resource: other_config
