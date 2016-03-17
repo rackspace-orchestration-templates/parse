@@ -386,7 +386,7 @@ outputs:
   public_ip:
     description: Load Balancer IP
     value:
-      get_attr: [load_balancer, PublcIp]
+      get_attr: [load_balancer, PublicIp]
   parse_api_url:
     description: Parse API URL
     value:
