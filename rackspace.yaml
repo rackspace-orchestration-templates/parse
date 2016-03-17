@@ -20,6 +20,14 @@ instructions: |
   After the stack has been created, you can find the admin username and
   password listed in the "Credentials" section of Stack Details.
 
+  PLEASE NOTE: If you configure this stack with secondary servers, you will need
+  to restart parse-server on the secondary nodes once the configuration has been
+  synchronized via Lsyncd.  In order to restart parse-server, you will need to
+  log into the server via SSH as 'parse', then run the following commands:
+  > pm2 stop parse-wrapper
+  >
+  > pm2 start ecosystem.json
+
   #### Details of Your Setup
   This deployment was stood up using [Ansible](http://www.ansible.com/).
   Once the stack has been deployed, Ansible will not run again unless you update the
@@ -60,16 +68,6 @@ instructions: |
   and all secondary servers, as well as that the Cloud Load Balancer is
   functioning.  Additionally, the default CPU, RAM, and Filesystem checks
   are in place on all servers.
-
-  #### Updating Drupal
-  Drupal does provide community documentation on [how to
-  upgrade](https://drupal.org/upgrade) your installation of Drupal. There are
-  several steps involved with the upgrade process. First, make sure to backup
-  your site files and your database prior to taking any steps to replace the
-  core site files. There are number of other tutorials available on places like
-  YouTube that can also step you though the upgrade/update process. There is
-  not currently a way to perform these upgrades automatically through the admin
-  interface.
 
   #### Logging in via SSH
   The private key provided in the passwords section can be used to login as

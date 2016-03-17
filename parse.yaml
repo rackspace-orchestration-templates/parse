@@ -87,8 +87,8 @@ parameters:
       - range: { min: 0, max: 10 }
   secondary_template:
     type: string
-    default: https://raw.githubusercontent.com/rackspace-orchestration-templates/parse-small/master/parse-small-secondary.yaml
-    #default: https://raw.githubusercontent.com/rackspace-orchestration-templates/parse-small/stable/parse-small-secondary.yaml
+    default: https://raw.githubusercontent.com/rackspace-orchestration-templates/parse/master/parse-secondary.yaml
+    #default: https://raw.githubusercontent.com/rackspace-orchestration-templates/parse/stable/parse-secondary.yaml
     label: Secondary Template
     description: Template to use for secondary servers
   ansible_branch:
@@ -196,6 +196,7 @@ resources:
         parse_git_key: { get_param: git_deploy_key }
         parse_git_repo: { get_param: git_repo_url }
         parse_git_version: { get_param: git_commit_sha }
+        parse_password: { get_attr: [parse_pass, value] }
         tz: "America/Chicago"
       config:
         get_resource: parse_config
@@ -358,7 +359,6 @@ resources:
       protocol: HTTPS
       httpsRedirect: true
       algorithm: ROUND_ROBIN
-      contentCaching: ENABLED
       virtualIps:
       - type: PUBLIC
         ipVersion: IPV4
