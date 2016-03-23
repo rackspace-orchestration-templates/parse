@@ -1,0 +1,88 @@
+#### Migrating from Parse to Rackspace
+
+1) Log into Parse.com and migrate your database to ObjectRocket.
+You can find instructions on how to do this here: https://objectrocket.com/parse
+
+2) Log into MyCloud.Rackspace.com, and go to Orchestration -> Stack Templates
+Select 'Parse' from the list, then select 'Create Stack'
+Alternately, you can click here to create the stack.
+//INSERT DIRECT LINK TO STACK PARAMS PAGE
+
+3) Fill out the form with the URL and e-mail address to use with Parse.  You can
+also add information regarding a Git repository to pull custom code from.  The
+Git information is optional.
+
+4) Once the stack has been successfully created, log into the
+server via SSH, as either 'root', using the SSH key provided, or as 'parse',
+using the password provided.
+The private key provided in the passwords section can be used to login as
+root via SSH. We have an article on how to use these keys with [Mac OS X and
+Linux](http://www.rackspace.com/knowledge_center/article/logging-in-with-a-ssh-private-key-on-linuxmac)
+as well as [Windows using
+PuTTY](http://www.rackspace.com/knowledge_center/article/logging-in-with-a-ssh-private-key-on-windows).
+If you are still having issues logging in, you can reach out to Rackspace Support
+and we can assist you.
+
+5) Once logged into the primary server, modify
+'/home/parse/ecosystem.json'.  You must configure the following
+information in 'ecosystem.json':
+MongoDB Connection String
+Application ID
+Master Key
+
+These values can be found at Parse.com, under "App Settings" > "Security and Keys"
+Any other application-specific keys are optional, and should be left blank if
+not used.
+
+The configuration file should look like the following:
+{
+  "apps" : [{
+    "name"        : "parse-wrapper",
+    "script"      : "/usr/local/bin/parse-server",
+    "watch"       : true,
+    "merge_logs"  : true,
+    "cwd"         : "/home/parse",
+    "env": {
+      "PARSE_SERVER_CLOUD_CODE_MAIN": "/home/parse/cloud/main.js",
+      "PARSE_SERVER_DATABASE_URI": "mongodb://user:password@ip:27017/db",
+      "PARSE_SERVER_APPLICATION_ID": "your_application_id",
+      "PARSE_SERVER_MASTER_KEY": "your_master_key",
+      "PARSE_SERVER_COLLECTION_PREFIX": "collection_prefix",
+      "PARSE_SERVER_CLIENT_KEY": "your_client_key",
+      "PARSE_SERVER_REST_API_KEY": "your_rest_key",
+      "PARSE_SERVER_DOTNET_KEY": "your_dotnet_key",
+      "PARSE_SERVER_JAVASCRIPT_KEY": "your_javascript_key",
+      "PARSE_SERVER_FILE_KEY": "your_file_key",
+      "PARSE_SERVER_FACEBOOK_APP_IDS": "app1, app2, app3",
+      "PARSE_MOUNT": "/1",
+    }
+  }]
+}
+
+
+6) After any changes have been made to 'ecosystem.json', Parse must be restarted.
+Do so by running the following two commands (as the 'Parse' user)
+> pm2 stop parse-wrapper
+> pm2 start ecosystem.json
+Repeat this step on all servers that were created by this stack.
+The 'parse' password should be the same across all servers.  These servers will
+be linked to via the Stack page, which should be displayed once you create your
+stack.  You can also find it by going to MyCloud, then selecting Orchestration ->
+Stacks, then clicking the name of your stack.
+
+7) Custom code will likely need to be modified before it will run successfully.
+You can find more information about this here.
+https://github.com/ParsePlatform/parse-server/wiki/Migrating-an-Existing-Parse-App#3-cloud-code
+You can view the logs of Parse at '/home/parse/.pm2/logs/'
+
+This stack already has all of the Cloud Code replacements installed.
+
+8) Once Parse is running, configure a valid certificate within
+Nginx.  This can be done by modifying '/etc/nginx/conf.d/<your url>.conf', where
+<your url> is replaced with the URL you provided in step 3.  If you do not have
+a valid certificate, you can purchase one through Rackspace if you are currently
+hosting a physical server with us.  If you aren't sure, please contact your Account
+Manager or Rackspace Support to determine if you are able.
+
+9) Now that you have your Parse server set up, you should be able to start
+testing!

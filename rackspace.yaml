@@ -8,7 +8,8 @@ reach-info:
   icon-20x20: https://0b5294b243620310a700-e388a7f3aba385a925111b1fc6f680d4.ssl.cf2.rackcdn.com/parse-icon-20x20.png
   rackspace-supported: true
 hidden_outputs:
- - parameter
+ - ssh_private_key
+ - parse_password
 abstract: |
   Parse Server is an open-source version of the Parse backend that can be
   deployed to any infrastructure that can run Node.js.
