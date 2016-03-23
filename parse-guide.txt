@@ -84,5 +84,29 @@ a valid certificate, you can purchase one through Rackspace if you are currently
 hosting a physical server with us.  If you aren't sure, please contact your Account
 Manager or Rackspace Support to determine if you are able.
 
-9) Now that you have your Parse server set up, you should be able to start
+9) This stack also comes with Parse Dashboard, which lets you visualize all the
+Parse applications running on this server.  This is configured separately from
+'parse-server'.  The configuration is located in
+'/home/parse/parse-dashboard-config.json'.  You must configure your
+Application ID and Master Key inside of this file if you would like to use
+Parse Dashboard.
+
+The configuration file should look like the following:
+{
+  "apps": [
+    {
+      "serverURL": "https://your_api_url/parse",
+      "appId": "your_application_id",
+      "masterKey": "your_master_key",
+      "appName": "Your Application"
+    }
+  ]
+}
+
+After you modify this file, you need to restart the Parse Dashboard
+service, by running the following command:
+>service parse-dashboard restart
+
+
+10) Now that you have your Parse server set up, you should be able to start
 testing!

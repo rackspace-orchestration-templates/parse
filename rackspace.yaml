@@ -44,6 +44,15 @@ instructions: |
   >
   > pm2 start ecosystem.json
 
+  [Parse Dashboard](https://github.com/ParsePlatform/parse-dashboard) was also
+  installed via NPM, and is configured to run using the configuration file
+  '/home/parse/parse-dashboard-config.json'.  You can find more information
+  about Parse Dashboard and the configuration
+  [here](https://github.com/ParsePlatform/parse-dashboard/blob/master/README.md).
+  After any changes are made to the configuration, you will need to restart
+  the dashboard by running the following command:
+  > service parse-dashboard restart
+
   [Lsyncd](https://github.com/axkibe/lsyncd) has been installed in order to
   sync static content from the primary server to all secondary servers.  In
   order to update any custom code you might have, you only need to upload the
