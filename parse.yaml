@@ -21,8 +21,7 @@ parameter_groups:
   parameters:
   - server_image
   - secondary_template
-  - ansible_branch
-  - ansible_repo
+  - ansible_source
 parameters:
   #parse Customization
   parse_url:
@@ -87,20 +86,15 @@ parameters:
       - range: { min: 0, max: 10 }
   secondary_template:
     type: string
-    #default: https://raw.githubusercontent.com/rackspace-orchestration-templates/parse/master/parse-secondary.yaml
-    default: https://raw.githubusercontent.com/rackspace-orchestration-templates/parse/stable/parse-secondary.yaml
+    default: http://catalog.rs-heat.com/parse/parse-secondary.yaml
     label: Secondary Template
     description: Template to use for secondary servers
-  ansible_branch:
+  ansible_source:
     type: string
-    default: stable
-    label: Git Branch or Tag for Ansible Roles
-    description: The Ansible Roles will be pulled from Git, using the tag or branch provided
-  ansible_repo:
-    type: string
-    default: https://github.com/rackspace-orchestration-templates/ansible-roles.git
-    label: Git Repo for Ansible Roles
-    description: The Ansible Roles will be pulled from Git, using the repo provided
+    default: http://catalog.rs-heat.com/ansible-roles/ansible-roles.tar.gz
+    label: Ansible Tarball
+    description: The Ansible Roles will be pulled from the location provided
+    immutable: true
 
 resources:
   #Passwords
@@ -334,8 +328,7 @@ resources:
               template: stack-secondary-%index%
               params:
                 stack: { get_param: "OS::stack_name" }
-          ansible_branch: { get_param: ansible_branch}
-          ansible_repo: { get_param: ansible_repo }
+          ansible_source: { get_param: ansible_source }
           parse_pass: { get_attr: [ parse_pass, value ] }
   #Cloud Load Balancer
   load_balancer:

@@ -36,12 +36,12 @@ parameters:
     default: exmaple.com
   master_server:
     type: string
-  ansible_branch:
+  ansible_source:
     type: string
-    default: stable
-  ansible_repo:
-    type: string
-    default: https://github.com/rackspace-orchestration-templates/ansible-roles.git
+    default: http://catalog.rs-heat.com/ansible-roles/ansible-roles.tar.gz
+    label: Ansible Tarball
+    description: The Ansible Roles will be pulled from the location provided
+    immutable: true
   parse_pass:
     type: string
     default: ""
@@ -58,10 +58,11 @@ resources:
           template: |
             #!/bin/bash
             set -e
-            git clone -b 'tag' --single-branch --progress repository /etc/ansible/roles > $heat_outputs_path.results 2>&1
+            mkdir -p /etc/ansible/roles
+            wget ansible_source -O /tmp/ansible-roles.tar.gz 2>&1
+            tar -xf /tmp/ansible-roles.tar.gz --strip-components=1 -C /etc/ansible/roles
           params:
-            tag: { get_param: ansible_branch}
-            repository: { get_param: ansible_repo }
+            ansible_source: { get_param: ansible_source }
 
   parse_config:
     type: OS::Heat::SoftwareConfig
