@@ -22,6 +22,9 @@ parameter_groups:
   - server_image
   - secondary_template
   - ansible_source
+  - app_name
+  - app_short_name
+  - port
 parameters:
   #parse Customization
   parse_url:
@@ -73,10 +76,10 @@ parameters:
       - 8 GB General Purpose v1
   server_image:
     type: string
-    default: f4bbbce2-50b0-4b07-bf09-96c175a45f4b
+    default: Ubuntu 14.04 LTS (Trusty Tahr) (PVHVM) (Orchestration)
     constraints:
     - allowed_values:
-      - f4bbbce2-50b0-4b07-bf09-96c175a45f4b
+      - Ubuntu 14.04 LTS (Trusty Tahr) (PVHVM) (Orchestration)
   server_count:
     type: number
     default: 0
@@ -95,6 +98,15 @@ parameters:
     label: Ansible Tarball
     description: The Ansible Roles will be pulled from the location provided
     immutable: true
+  app_name:
+    type: string
+    default: Your Application
+  app_short_name:
+    type: string
+    default: parse
+  port:
+    type: string
+    default: 1337
 
 resources:
   #Passwords
@@ -177,6 +189,10 @@ resources:
       input_values:
         nginx_vhost_str: { get_param: parse_url }
         nginx_vhost_template: "parse"
+        nginx_overwrite: false
+        parse_app_name: { get_param: app_name }
+        parse_short_name: { get_param: app_short_name }
+        parse_port: { get_param: port }
         parse_cloud_code_main: "/home/parse/cloud/main.js"
         parse_database_uri: "mongodb://parse:password@localhost:27017/parseDb"
         parse_application_id: "your_application_id"
@@ -204,7 +220,7 @@ resources:
       signal_transport: TEMP_URL_SIGNAL
       input_values:
         lsync_private_key: { get_attr: [ssh_key, private_key] }
-        lsync_dirs: ['/home/parse']
+        lsync_dirs: ['/home/parse', '/etc/nginx/conf.d/']
         lsync_servers: { get_attr: [parse_secondary, private_ip] }
         firewall_global_rules: [ "0.0.0.0,0,22,tcp", "0.0.0.0,0,80,tcp", "0.0.0.0,0,443,tcp"]
         firewall_nodes: { get_attr: [parse_secondary, private_ip] }
