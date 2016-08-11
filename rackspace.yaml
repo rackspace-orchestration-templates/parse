@@ -27,7 +27,7 @@ instructions: |
   log into the server via SSH as 'parse', then run the following commands:
   > pm2 stop parse-wrapper
   >
-  > pm2 start ecosystem.json
+  > pm2 start parse.json
 
   #### Details of Your Setup
   This deployment was stood up using [Ansible](http://www.ansible.com/).
@@ -42,7 +42,7 @@ instructions: |
   server via SSH as 'parse', then run the following commands:
   > pm2 stop parse-wrapper
   >
-  > pm2 start ecosystem.json
+  > pm2 start parse.json
 
   [Parse Dashboard](https://github.com/ParsePlatform/parse-dashboard) was also
   installed via NPM, and is configured to run using the configuration file
@@ -65,11 +65,11 @@ instructions: |
 
   #### Configuring Parse-server
   Parse-server is configured using the environment variables in
-  '/home/parse/ecosystem.json'.  This includes the connection string for
+  '/home/parse/parse.json'.  This includes the connection string for
   MongoDB, the Application ID, the Master Key, as well as any additional
   platform-specific keys you would like to configure.  If you need to update any
   of this information, or would prefer not to provide the information to
-  Rackspace directly, you can configure the 'ecosystem.json' file yourself.
+  Rackspace directly, you can configure the 'parse.json' file yourself.
 
   Backups are configured using Cloud Backups.  The primary server is configured
   to back up /home/parse once per week, and to retain these backups for 30 days.
